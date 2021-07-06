@@ -26,16 +26,16 @@ function idk() {
         })
         .then(function (data) {
             console.log(data)
-            currentTemp = ((data.main.temp-273.15)*1.8)+32
+            currentTemp = Math.round(((data.main.temp-273.15)*1.8)+32)
             currentTime = data.dt
             console.log(data.dt)
             console.log(currentTemp)
-            var unixFormat = moment.unix(data.dt).format("MMM Do, YYYY, hh:mm:ss");
+            var unixFormat = moment.unix(data.dt).format("MMM Do, YYYY");
             console.log(unixFormat)
-            cityName.textContent = data.name
+            cityName.textContent = data.name+",   "+unixFormat
             cityTemp.textContent = "Temp: " + currentTemp + " F"
-            cityWind.textContent = "Wind " + data.wind.speed*2.236936 + "MPH"
-            cityHumid.textContent = "Humidity " + data.main.humidity + "%"
+            cityWind.textContent = "Wind: " + Math.round(data.wind.speed*2.236936) + " MPH"
+            cityHumid.textContent = "Humidity: " + data.main.humidity + " %"
             // cityUV.textContent = data.
 
             console.log('Github Repo Issues \n----------');
@@ -50,13 +50,36 @@ function idk() {
             })
             .then(function (data) {
                 console.log(data)
+                $("#5day").text("5 day forecast:")
+                document.getElementById("forecast").innerHTML = ""
 
                 for(i=1;i<6;i++){
-                    let day = $("<p>")
-                    console.log(8*i-3)
-                    day.text((data.list[8*i-3].main.temp-273.15)*1.8+32)
-                    console.log(data.list[8*i-3].main.temp)
-                    forecast.append(day)
+                    let card = $("<div>")
+                    let head = $("<h3>")
+                    let dayTemp = $("<p>")
+                    let dayWind = $("<p>")
+                    let dayHumid = $("<p>")
+                    let icon = $("<img>")
+                    let iconcode = data.list[8*i-3].weather[0].icon
+                    let url = "http://openweathermap.org/img/w/" + iconcode + ".png"
+
+                    card.addClass("card")
+                    card.attr("style", "width: 200px;")
+                    dayTemp.text("Temp: " + Math.round((data.list[8*i-3].main.temp-273.15)*1.8+32)+" F")
+                    dayWind.text("Wind: " + Math.round(data.list[8*i-3].wind.speed*2.236936) + " MPH")
+                    dayHumid.text("Humidity: " + data.list[8*i-3].main.humidity + " %")
+                    icon.attr("src",url)
+                    console.log(data.list[8*i-3].weather[0].icon)
+                    head.text(moment.unix(data.list[8*i-3].dt).format("MMM Do, YYYY"))
+                    
+
+                    
+                    forecast.append(card)
+                    card.append(head)
+                    card.append(icon)
+                    card.append(dayTemp)
+                    card.append(dayWind)
+                    card.append(dayHumid)
                     
 
                 }
@@ -69,6 +92,6 @@ $(function () {
  
   $('#input').autocomplete({
     source: UScities,
-    minLength : 3,
+    minLength : 2,
   });
 });
