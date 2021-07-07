@@ -51,7 +51,7 @@ button.addEventListener("click", idk)
 
 // console.log($(".searchentry"))
 
-// test = $(".searchentry")
+test = $(".searchentry")
 seriously()
 function seriously(){
     test.on("click", searchbyhistory)
