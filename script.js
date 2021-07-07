@@ -14,6 +14,8 @@ let citynames = []
 
 let forecast = $("#forecast")
 
+let call = false
+
 captureprevious()
 
 function captureprevious(){
@@ -40,6 +42,7 @@ function render(){
     }
     test = $(".searchentry")
     console.log("finish render!!")
+    call = false
     seriously()
 }
 
@@ -48,22 +51,37 @@ button.addEventListener("click", idk)
 
 // console.log($(".searchentry"))
 
-test = $(".searchentry")
+// test = $(".searchentry")
 seriously()
 function seriously(){
     test.on("click", searchbyhistory)
 }
 
+let pastsearch
 
 function searchbyhistory(){
     console.log("hello")
     console.log(this.textContent)
+    pastsearch = this.textContent
+    call = true
+    idk()
+
 }
+
+let searchthis
 
 function idk() {
     let input = document.getElementById("input")
+    if(call){
+        searchthis = pastsearch
+    }
+
+    else{
+        searchthis = input.value
+    }
+
     // localStorage.setItem("cityname", input.value)
-    let requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + input.value + '&appid=fe9404aff544749cffd20c2496a42432';
+    let requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + searchthis + '&appid=fe9404aff544749cffd20c2496a42432';
     fetch(requestUrl)
     .then(function (response) {
         // console.log(response.status)
@@ -94,7 +112,7 @@ function idk() {
         // console.log('Github Repo Issues \n----------');
     });
     
-    let requestUrl2 = 'https://api.openweathermap.org/data/2.5/forecast?q=' + input.value + '&appid=fe9404aff544749cffd20c2496a42432';
+    let requestUrl2 = 'https://api.openweathermap.org/data/2.5/forecast?q=' + searchthis + '&appid=fe9404aff544749cffd20c2496a42432';
     
     fetch(requestUrl2)
     .then(function (response) {
@@ -155,13 +173,13 @@ function idk() {
 }
 
 function arrayEdit() {
-    if(!citynames.includes(input.value)){
-    citynames.push(input.value)
-    citynames.reverse()
-    localStorage.setItem("citynames", JSON.stringify(citynames))
-}
+    if (!citynames.includes(searchthis)) {
+        citynames.push(searchthis)
+        citynames.reverse()
+        localStorage.setItem("citynames", JSON.stringify(citynames))
+    }
 
-console.log("start new render")
+    console.log("start new render")
 
     input.value = ""
     render()
