@@ -11,11 +11,13 @@ let cityUV = document.getElementById("cityUV")
 
 let citynames = []
 
+
 let forecast = $("#forecast")
 
-renderhistory()
+captureprevious()
 
-function renderhistory(){
+function captureprevious(){
+    console.log("START")
     let storednames = JSON.parse(localStorage.getItem("citynames"))
     if(storednames!=null){
     citynames = storednames
@@ -25,6 +27,10 @@ function renderhistory(){
         return
     }
 
+    render()
+}
+
+function render(){
     document.getElementById("history").innerHTML=""
     for(i=0; i<citynames.length; i++){
         let historyEl = $("<p>")
@@ -32,36 +38,53 @@ function renderhistory(){
         historyEl.text(citynames[i])
         $("#history").append(historyEl)
     }
+    test = $(".searchentry")
+    console.log("finish render!!")
 }
 
 button.addEventListener("click", idk)
 
+
+// console.log($(".searchentry"))
+
+test = $(".searchentry")
+seriously()
+function seriously(){
+    test.on("click", searchbyhistory)
+}
+
+
+function searchbyhistory(){
+    console.log("hello")
+    console.log(this.textContent)
+}
+
 function idk() {
     let input = document.getElementById("input")
-    localStorage.setItem("cityname", input.value)
+    // localStorage.setItem("cityname", input.value)
     let requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + input.value + '&appid=fe9404aff544749cffd20c2496a42432';
     fetch(requestUrl)
     .then(function (response) {
-        console.log(response.status)
+        // console.log(response.status)
         return response.json();
     })
     .then(function (data) {
         console.log(data)
         currentTemp = Math.round(((data.main.temp-273.15)*1.8)+32)
         currentTime = data.dt
-        console.log(data.dt)
-        console.log(data.dt+data.timezone+14400)
+        // console.log(data.dt)
+        // console.log(data.dt+data.timezone+14400)
         
-        console.log(moment.unix(data.dt).format("MMM Do, YYYY, hh:mm:ss"))
+        // console.log(moment.unix(data.dt).format("MMM Do, YYYY, hh:mm:ss"))
         var unixFormat = moment.unix(data.dt+data.timezone+14400).format("MMM Do, YYYY, hh:mm:ss");
-        console.log(unixFormat)
+        // console.log(unixFormat)
         cityName.textContent = data.name+",   "+unixFormat
         cityTemp.textContent = "Temp: " + currentTemp + " F"
         cityWind.textContent = "Wind: " + Math.round(data.wind.speed*2.236936) + " MPH"
         cityHumid.textContent = "Humidity: " + data.main.humidity + " %"
         // cityUV.textContent = data.
         
-        console.log('Github Repo Issues \n----------');
+        // console.log('Github Repo Issues \n----------');
     });
     
     let requestUrl2 = 'https://api.openweathermap.org/data/2.5/forecast?q=' + input.value + '&appid=fe9404aff544749cffd20c2496a42432';
@@ -103,16 +126,20 @@ function idk() {
                     card.append(dayTemp)
                     card.append(dayWind)
                     card.append(dayHumid)
-                    
-                    
-                    
+
                 }
-                
+                console.log("finish fetching!!")
+                seriously()
             })
+            
             citynames.push(input.value)
             localStorage.setItem("citynames", JSON.stringify(citynames))
             input.value = ""
-            renderhistory()
+
+            console.log("start new render")
+            
+            render()
+            
         }
         
 $(function () {
@@ -124,3 +151,5 @@ $(function () {
     minLength : 2,
   });
 });
+
+console.log("repeat???")

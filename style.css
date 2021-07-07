@@ -32,9 +32,14 @@ img{
     justify-content: center;
     text-align: center;
     width: 300px;
+    margin-top: 25px;
 }
 
 .searchentry{
     border: solid;
 }
 
+.searchentry:hover{
+    background-color: teal;
+    transition: 100ms;
+}
