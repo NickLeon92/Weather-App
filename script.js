@@ -71,6 +71,7 @@ function idk() {
     })
     .then(function (data) {
         if(data.cod!=200){
+            window.alert("invalid input")
             return
         }
         console.log(data)
@@ -154,13 +155,15 @@ function idk() {
 }
 
 function arrayEdit() {
+    if(!citynames.includes(input.value)){
     citynames.push(input.value)
     citynames.reverse()
     localStorage.setItem("citynames", JSON.stringify(citynames))
+}
+
+console.log("start new render")
+
     input.value = ""
-
-    console.log("start new render")
-
     render()
 }
 
