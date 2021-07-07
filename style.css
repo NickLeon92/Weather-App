@@ -1,5 +1,7 @@
 #search {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    height: 2rem;
 }
 
 img{
@@ -9,3 +11,30 @@ img{
 #forecast{
     display: flex;
 }
+
+#main{
+    display: flex;
+    justify-content: center;
+    
+}
+
+#input{
+    width: 400px;
+}
+
+#searchsection{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#history{
+    justify-content: center;
+    text-align: center;
+    width: 300px;
+}
+
+.searchentry{
+    border: solid;
+}
+
